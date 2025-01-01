@@ -1,7 +1,18 @@
-{% extends 'base.html' %}
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <style>
+        body {background-color: #F5F5DC; color: #222;}
+        .centered {text-align: center;}
+    </style>
+</head>
 {% block content %}
-  <h1>Add New Post</h1>
+  <header class='centered'>
+  <h1>Добавить новый пост</h1>
+  </header>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       <ul class="flashes">
@@ -12,10 +23,17 @@
     {% endif %}
   {% endwith %}
   <form method="post">
-    <label for="title">Title</label><br>
+    <label for="title">Заголовок</label><br>
     <input type="text" id="title" name="title"><br>
-    <label for="content">Content</label><br>
-    <textarea id="content" name="content"></textarea><br>
+    <label for="rezume">Краткая информация</label><br>
+    <input type="text" id="rezume" name="rezume"><br>
+    <label for="info">Материал поста</label><br>
+    <textarea id="info" name="info"></textarea><br>
+    <input type="hidden" id="created_at" name="created_at"><br>
+    <input type="hidden" id="slug" name="slug"><br>
     <input type="submit" value="Submit">
   </form>
+  <script>
+    document.getElementById('created_at').value = new Date().toISOString();
+  </script>
 {% endblock %}

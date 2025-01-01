@@ -1,15 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ post.title }}</title>
+    <style>
+        body {background-color: #F5F5DC; color: #222;}
+        .centered {text-align: center;}
+    </style>
 </head>
 <body>
     <h1>{{ post.title }}</h1>
     <p>{{ post.info }}</p>
-    <small>Создано: {{ post.created_at }}</small>
-    <br>
-    <a href="{{ url_for('home') }}">Назад к списку постов</a>
+    <small>Создано: {{ post.created_at }}</small><br>
+    <small>ID: {{ post.id }}</small><br>
+    <a href="{{ url_for('index') }}"><button>Назад к списку постов</button></a><br>
+    <form action="{{ url_for('delete_post', post_slug=post.slug) }}" method="POST" onsubmit="return confirm('Вы уверены, что хотите удалить этот пост?');">
+    <button type="submit">Удалить пост</button>
+    </form>
 </body>
 </html>
