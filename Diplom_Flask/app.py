@@ -40,7 +40,7 @@ def init_db():
         'rezume TEXT NOT NULL, '
         'info TEXT NOT NULL, '
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP, '
-        'slug TEXT UNIQUE NOT NULL)')
+        'slug UNIQUE TEXT NOT NULL)')
     conn.close()
 
 
