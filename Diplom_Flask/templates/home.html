@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts</title>
+    <style>
+        body {
+            background-color: #F5F5DC;
+            color: #222;
+        }
+        .centered {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class='centered'>
+        <h1>Posts</h1>
+    </header>
+    <ul>
+        {% if posts %}
+            {% for post in posts %}
+                <li>
+                    <h3><a href="{{ url_for('details') }}">{{ post.title }}</a></h3>
+                    <p>{{ post.rezume }}</p>
+                    <small>Создано: {{ post.created_at }}</small>
+                    <small>ID: {{ post.id }}</small>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>Нет записей блога.</li>
+        {% endif %}
+    </ul>
+</body>
+</html>
