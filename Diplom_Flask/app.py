@@ -17,7 +17,7 @@ def before_first_request():
 
 
 def generate_slug(title):
-    slug = re.sub(r'[^a-zA-Z0-9-]', '-', title.lower())
+    slug = re.sub(r'[^a-zA-Zа-яА-Я0-9-]', '-', title.lower())
     slug = re.sub(r'-+', '-', slug).strip('-')
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -88,7 +88,7 @@ def new_post():
     return render_template('add_post.html')
 
 
-@app.route('/posts/slug/delete', methods=['POST'])
+@app.route('/posts/<slug>/delete', methods=['POST'])
 def delete_post(slug):
     conn = get_db_connection()
     post = conn.execute('DELETE FROM posts WHERE slug = ?', (slug,))
