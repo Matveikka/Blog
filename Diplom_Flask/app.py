@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
+from datetime import datetime
 import sqlite3
 import re
-from datetime import datetime
 
 app = Flask(__name__)
 
@@ -88,13 +88,20 @@ def new_post():
     return render_template('add_post.html')
 
 
-@app.route('/posts/<slug>/delete', methods=['POST'])
-def delete_post(slug):
+@app.post('/posts/<slug>/delete')
+def delete_post(slug: str):
     conn = get_db_connection()
-    post = conn.execute('DELETE FROM posts WHERE slug = ?', (slug,))
+    post = conn.execute('SELECT title, info, created_at FROM posts WHERE slug = ? ', (slug,)).fetchone()
+    title = post['title']
+    conn.execute('DELETE FROM posts WHERE slug = ?', (slug,))
     conn.commit()
     conn.close()
-    return render_template('after_delete.html', post=post)
+    return redirect(url_for('after_delete', title=title))
+
+
+@app.get('/posts/deleted/<title>')
+def after_delete(title: str):
+    return render_template('after_delete.html', title=title)
 
 
 if __name__ == '__main__':
