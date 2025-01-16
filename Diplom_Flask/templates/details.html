@@ -2,8 +2,8 @@
 
 {% block content %}
     <h2>{{ post['title'] }}</h2>
-    <p><small>Создано: {{ post['created_at'] }}</small></p>
     <p>{{ post['info'] }}</p>
+    <p><small>Создано: {{ post['created_at'] }}</small></p>
     <a href="{{ url_for('all_posts') }}"><button>Назад к списку постов</button></a><br>
     <form method="post" action="/posts/{{ post['slug'] }}/delete" style="display:inline;">
     <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этот пост?');">Удалить пост</button>
