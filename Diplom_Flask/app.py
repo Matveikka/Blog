@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import current_user, LoginManager, login_user
+from flask_bcrypt import Bcrypt
+from models.models import User
 from datetime import datetime
 import sqlite3
 import re
-from flask_login import current_user, LoginManager, UserMixin, login_user
-from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
@@ -22,13 +23,6 @@ def before_first_request():
         init_db()
         init_superuser()
         first_request = False
-
-
-class User(UserMixin):
-    def __init__(self, id, username, is_superuser):
-        self.id = id
-        self.username = username
-        self.is_superuser = is_superuser
 
 
 @login_manager.user_loader
@@ -118,7 +112,8 @@ def get_post(slug):
     conn = get_db_connection()
     post = conn.execute('SELECT * FROM posts WHERE slug = ?', (slug,)).fetchone()
     conn.close()
-    return render_template('details.html', post=post)
+    is_superuser = current_user.is_superuser if current_user.is_authenticated else False
+    return render_template('details.html', post=post, is_superuser=is_superuser)
 
 
 @app.route('/new_post', methods=['GET', 'POST'])
