@@ -9,7 +9,9 @@
 <body>
     <div class="container">
         <header>
-            <h1 class="centered">Блог пользователя Matveikka</h1>
+            {% if show_header %}
+                <h1 class="centered">Блог пользователя Matveikka</h1>
+            {% endif %}
         </header>
         <main>
             {% block content %}{% endblock %}

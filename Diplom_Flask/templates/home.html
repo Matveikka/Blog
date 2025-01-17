@@ -1,8 +1,12 @@
 {% extends "base.html" %}
+{% set show_header = True %}
 
 {% block content %}
     <h2 class="centered">Список постов</h2>
-    <a href="/new">Добавить новый пост</a>
+    {% if is_superuser %}
+        <button type="button" onclick="location.href='/new_post'">Добавить новый пост</button>
+    {% endif %}
+    <button type="button" onclick="location.href='/'" class="logout-button">Выйти</button>
     {% for post in posts %}
         <div class="post">
             <h2><a href="/posts/{{ post['slug'] }}">{{ post['title'] }}</a></h2>

@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% set show_header = True %}
 
 {% block content %}
     <h2 class="centered">Добавить новый пост</h2>
-    <form method="post" action="/new">
+    <form method="post" action="/new_post">
         <label for="title">Заголовок</label><br>
         <input type="text" id="title" name="title" required><br>
         <label for="rezume">Краткая информация</label><br>
@@ -10,6 +11,6 @@
         <label for="info">Материал поста</label><br>
         <textarea id="info" name="info" required></textarea><br>
         <input type="submit" value="Создать пост"><br>
-        <a href="/">Назад к списку постов</a>
+        <button type="button" onclick="location.href='/home_page'">Назад к списку постов</button>
     </form>
 {% endblock %}
