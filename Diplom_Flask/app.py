@@ -6,7 +6,6 @@ from datetime import datetime
 import sqlite3
 import re
 
-
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.secret_key = 'secret_key'
@@ -23,39 +22,6 @@ def before_first_request():
         init_db()
         init_superuser()
         first_request = False
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    conn = get_db_connection()
-    user = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-    conn.close()
-    return User(user['id'], user['username'], user['is_superuser']) if user else None
-
-
-def get_user_by_id(user_id):
-    conn = get_db_connection()
-    user_data = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
-    close_db_connection(conn)
-    if user_data:
-        return User(user_data['id'], user_data['username'], user_data['is_superuser'])
-    return None
-
-
-def generate_slug(title):
-    slug = re.sub(r'[^a-zA-Zа-яА-Я0-9-]', '-', title.lower())
-    slug = re.sub(r'-+', '-', slug).strip('-')
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    original_slug = slug
-    count = cursor.execute('SELECT COUNT(*) FROM posts WHERE slug = ?', (slug,)).fetchone()[0]
-    i = 1
-    while count > 0:
-        slug = f"{original_slug}-{i}"
-        count = cursor.execute('SELECT COUNT(*) FROM posts WHERE slug = ?', (slug,)).fetchone()[0]
-        i += 1
-    close_db_connection(conn)
-    return slug
 
 
 def get_db_connection():
@@ -133,6 +99,22 @@ def new_post():
     return render_template('add_post.html')
 
 
+def generate_slug(title):
+    slug = re.sub(r'[^a-zA-Zа-яА-Я0-9-]', '-', title.lower())
+    slug = re.sub(r'-+', '-', slug).strip('-')
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    original_slug = slug
+    count = cursor.execute('SELECT COUNT(*) FROM posts WHERE slug = ?', (slug,)).fetchone()[0]
+    i = 1
+    while count > 0:
+        slug = f"{original_slug}-{i}"
+        count = cursor.execute('SELECT COUNT(*) FROM posts WHERE slug = ?', (slug,)).fetchone()[0]
+        i += 1
+    close_db_connection(conn)
+    return slug
+
+
 @app.post('/posts/<slug>/delete')
 def delete_post(slug: str):
     conn = get_db_connection()
@@ -183,6 +165,23 @@ def login():
         else:
             flash('Неверное имя пользователя или пароль!')
     return render_template('login.html')
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+    conn.close()
+    return User(user['id'], user['username'], user['is_superuser']) if user else None
+
+
+def get_user_by_id(user_id):
+    conn = get_db_connection()
+    user_data = conn.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+    close_db_connection(conn)
+    if user_data:
+        return User(user_data['id'], user_data['username'], user_data['is_superuser'])
+    return None
 
 
 if __name__ == '__main__':
