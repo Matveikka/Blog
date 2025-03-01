@@ -147,7 +147,7 @@ def register():
             conn.commit()
             return redirect(url_for('login'))
         conn.close()
-    return render_template('register.html')
+    return render_template('index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
